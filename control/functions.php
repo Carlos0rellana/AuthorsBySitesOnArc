@@ -138,7 +138,7 @@
         if(!file_exists($fileUrl)){
             $jsonNew = makeAuthorListByCountry($site_id,$siteUrl,$cdn);
             writeFile($fileUrl,json_encode($jsonNew));
-        }elseif(file_exists($fileUrl) && ((date('U') - filectime($fileUrl)> /*86400*/ 30) || $forced===true)){
+        }elseif(file_exists($fileUrl) && ((date('U') - filectime($fileUrl)> 86400) || $forced===true)){
             $jsonOld = $saveJson = json_decode(file_get_contents($fileUrl),true);
             $jsonNew = makeAuthorListByCountry($site_id,$siteUrl,$cdn);
             if(count($jsonNew)>0){
