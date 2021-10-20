@@ -1,0 +1,6 @@
+<?php
+
+$pass  ='ingrese acá el valor dado por ARC';
+$apiUrl='ingrese acá la ruta de su api site (agregue el / final)';
+
+?>
