@@ -98,30 +98,32 @@
         $liString='';
         if(file_exists($jsonUrl) && !$jsonList['error']){
             foreach($jsonList as $author){
-                $liString .= '<li>';
-                getResizedImage($author['image'],$cdn);
-                if($author['url']){
-                    $liString .='<a href="'.$route.$author['url'].'" target="_top" class="box-item">';
-                }else{
-                    $liString .='<div class="box-item no-pointer">';
-                }
-                $liString .= '<div class="name">
-                                <h3>'.$author['name'].'</h3>
-                              </div>';
-                $liString .= '<div class="flex-center">
-                                <div class="relative">
-                                    <div class="colons">
-                                        <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"></path></svg>
+                if($author['url'] && $author['lastArticleUnix']!==0){
+                    $liString .= '<li>';
+                    getResizedImage($author['image'],$cdn);
+                    if($author['url']){
+                        $liString .='<a href="'.$route.$author['url'].'" target="_top" class="box-item">';
+                    }else{
+                        $liString .='<div class="box-item no-pointer">';
+                    }
+                    $liString .= '<div class="name">
+                                    <h3>'.$author['name'].'</h3>
+                                </div>';
+                    $liString .= '<div class="flex-center">
+                                    <div class="relative">
+                                        <div class="colons">
+                                            <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"></path></svg>
+                                        </div>
+                                        <div class="img-contains"><img src="'.$author['image'].'"/></div>
                                     </div>
-                                    <div class="img-contains"><img src="'.$author['image'].'"/></div>
-                                </div>
-                            </div>';
-                if($author['url']){
-                    $liString .='</a>';
-                }else{
-                    $liString .='</div>';
+                                </div>';
+                    if($author['url']){
+                        $liString .='</a>';
+                    }else{
+                        $liString .='</div>';
+                    }
+                    $liString .='</li>';
                 }
-                $liString .='</li>';
             }
             return('<ul class="authors gallery js-flickity" data-flickity-options=\'{ "wrapAround": true }\'>'.$liString.'</ul>');
         }
