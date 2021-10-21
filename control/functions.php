@@ -17,12 +17,10 @@
     }
 
     function getResizedImage($imgRoute,$rootSite){
-        $routeCloud = 'https://cloudfront-us-east-1.images.arcpublishing.com/metroworldnews/';
-        $routeImg = str_replace($routeCloud,'',$imgRoute);
-        $idImg = explode('.',$routeImg)[0];
+        $idImg = pathinfo($imgRoute, PATHINFO_FILENAME);
         $imgObject = json_decode(getAuthorImageFromArc($idImg));
         if(isset($imgObject->additional_properties)){
-            return $rootSite.$imgObject->additional_properties->thumbnailResizeUrl;
+            return $rootSite.$imgObject->additional_properties->resizeUrl;
         }
         return $imgRoute;
     }
@@ -77,7 +75,7 @@
                     $author['lastArticle']=$lastArticle;
                     $author['lastArticleUnix']=$date;
                     if($value->image){
-                        $author['image']=$value->image;
+                        $author['image']=getResizedImage($value->image,$cdn);
                     }
                     if($value->bio_page){
                         $author['url']=$value->bio_page;
@@ -115,7 +113,7 @@
                                     <div class="colons">
                                         <svg class="MuiSvgIcon-root" focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"></path></svg>
                                     </div>
-                                    <img src="'.$author['image'].'"/>
+                                    <div class="img-contains"><img src="'.$author['image'].'"/></div>
                                 </div>
                             </div>';
                 if($author['url']){
@@ -138,7 +136,7 @@
         if(!file_exists($fileUrl)){
             $jsonNew = makeAuthorListByCountry($site_id,$siteUrl,$cdn);
             writeFile($fileUrl,json_encode($jsonNew));
-        }elseif(file_exists($fileUrl) && ((date('U') - filectime($fileUrl)> 86400) || $forced===true)){
+        }elseif(file_exists($fileUrl) && ((date('U') - filectime($fileUrl)> /*86400*/ 30) || $forced===true)){
             $jsonOld = $saveJson = json_decode(file_get_contents($fileUrl),true);
             $jsonNew = makeAuthorListByCountry($site_id,$siteUrl,$cdn);
             if(count($jsonNew)>0){
