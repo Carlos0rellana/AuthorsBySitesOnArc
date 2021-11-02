@@ -96,7 +96,7 @@
         $jsonUrl=ROOT_DIR.'/data/'.$site_id.'.json';
         $jsonList=json_decode(getAuthorsCountry($site_id,$route,$cdn,$forced), true);
         $liString='';
-        if(file_exists($jsonUrl) && !$jsonList['error']){
+        if(file_exists($jsonUrl) && !array_key_exists('error',$jsonList)){
             foreach($jsonList as $author){
                 if($author['url'] && $author['lastArticleUnix']!==0){
                     $liString .= '<li>';
